@@ -3,6 +3,10 @@
     "mssql1": {
       "type": "mssql.local",
       "connectionId": "TestContext"
+    },
+    "mssql2": {
+      "type": "mssql.local",
+      "connectionId": "T120B165Context"
     }
   }
 }

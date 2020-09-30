@@ -26,8 +26,8 @@ namespace T120B165
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<TestContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("TestContext")));
+            services.AddDbContext<T120B165Context>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("T120B165Context")));
             services.AddSwaggerGen();
         }
 
