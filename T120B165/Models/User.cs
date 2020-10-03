@@ -8,7 +8,7 @@ namespace T120B165.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         [Required]
         [RegularExpression(@"^[A-Z][a-z]*$")]
         public string FirstName { get; set; }

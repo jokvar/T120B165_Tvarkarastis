@@ -9,6 +9,11 @@ namespace T120B165.Models
     {
         [Required]
         [StringLength(5, MinimumLength = 5)]
+        [RegularExpression(@"^[A-Z][0-9][0-9][0-9][0-9]$")]
+
         public string Vidko { get; set; }
+
+        //public ICollection<ModuleStudent> ModuleStudents { get; set; }
+        public ICollection<Student> Students { get; set; }
     }
 }

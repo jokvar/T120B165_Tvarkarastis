@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using T120B165.Data;
 
 namespace T120B165.Migrations
 {
     [DbContext(typeof(T120B165Context))]
-    partial class T120B165ContextModelSnapshot : ModelSnapshot
+    [Migration("20201003113747_Student-Module-many2many")]
+    partial class StudentModulemany2many
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -25,7 +25,13 @@ namespace T120B165.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Module>>> GetModules()
         {
-            return await _context.Modules.ToListAsync();
+            //return await _context.Modules.ToListAsync();
+            return await _context.Modules
+                .Include(m => m.ModuleStudents)
+                .ThenInclude(ms => ms.Student)
+                .ToListAsync();
+                                    
+
         }
 
         // GET: api/Modules/5
@@ -48,7 +54,7 @@ namespace T120B165.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutModule(int id, Module @module)
         {
-            if (id != @module.Id)
+            if (id != @module.ID)
             {
                 return BadRequest();
             }
@@ -83,7 +89,7 @@ namespace T120B165.Controllers
             _context.Modules.Add(@module);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetModule", new { id = @module.Id }, @module);
+            return CreatedAtAction("GetModule", new { id = @module.ID }, @module);
         }
 
         // DELETE: api/Modules/5
@@ -104,7 +110,7 @@ namespace T120B165.Controllers
 
         private bool ModuleExists(int id)
         {
-            return _context.Modules.Any(e => e.Id == id);
+            return _context.Modules.Any(e => e.ID == id);
         }
     }
 }

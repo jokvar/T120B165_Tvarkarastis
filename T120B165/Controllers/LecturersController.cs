@@ -48,7 +48,7 @@ namespace T120B165.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLecturer(int id, Lecturer lecturer)
         {
-            if (id != lecturer.Id)
+            if (id != lecturer.ID)
             {
                 return BadRequest();
             }
@@ -83,7 +83,7 @@ namespace T120B165.Controllers
             _context.Lecturers.Add(lecturer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetLecturer", new { id = lecturer.Id }, lecturer);
+            return CreatedAtAction("GetLecturer", new { id = lecturer.ID }, lecturer);
         }
 
         // DELETE: api/Lecturers/5
@@ -104,7 +104,7 @@ namespace T120B165.Controllers
 
         private bool LecturerExists(int id)
         {
-            return _context.Lecturers.Any(e => e.Id == id);
+            return _context.Lecturers.Any(e => e.ID == id);
         }
     }
 }

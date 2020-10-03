@@ -25,7 +25,10 @@ namespace T120B165.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
-            return await _context.Students.ToListAsync();
+            return await _context.Students
+                //.Include("ModuleStudent.Module")
+                .ToListAsync();
+                                    
         }
 
         // GET: api/Students/5
@@ -48,7 +51,7 @@ namespace T120B165.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStudent(int id, Student student)
         {
-            if (id != student.Id)
+            if (id != student.ID)
             {
                 return BadRequest();
             }
@@ -83,7 +86,7 @@ namespace T120B165.Controllers
             _context.Students.Add(student);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetStudent", new { id = student.Id }, student);
+            return CreatedAtAction("GetStudent", new { id = student.ID }, student);
         }
 
         // DELETE: api/Students/5
@@ -104,7 +107,7 @@ namespace T120B165.Controllers
 
         private bool StudentExists(int id)
         {
-            return _context.Students.Any(e => e.Id == id);
+            return _context.Students.Any(e => e.ID == id);
         }
     }
 }
