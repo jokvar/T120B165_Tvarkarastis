@@ -12,53 +12,48 @@ namespace T120B165.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ModulesController : ControllerBase
+    public class LecturesController : ControllerBase
     {
         private readonly T120B165Context _context;
 
-        public ModulesController(T120B165Context context)
+        public LecturesController(T120B165Context context)
         {
             _context = context;
         }
 
-        // GET: api/Modules
-        /// <summary>
+        // GET: api/Lectures
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Module>>> GetModules()
+        public async Task<ActionResult<IEnumerable<Lecture>>> GetLectures()
         {
-            return await _context.Modules
-                .Include(m => m.Students)
-                .ThenInclude(s => s.Student)
-                .Include(m => m.Lecturer)
-                .ToListAsync();
+            return await _context.Lectures.ToListAsync();
         }
 
-        // GET: api/Modules/5
+        // GET: api/Lectures/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Module>> GetModule(int id)
+        public async Task<ActionResult<Lecture>> GetLecture(int id)
         {
-            var @module = await _context.Modules.FindAsync(id);
+            var lecture = await _context.Lectures.FindAsync(id);
 
-            if (@module == null)
+            if (lecture == null)
             {
                 return NotFound();
             }
 
-            return @module;
+            return lecture;
         }
 
-        // PUT: api/Modules/5
+        // PUT: api/Lectures/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutModule(int id, Module @module)
+        public async Task<IActionResult> PutLecture(int id, Lecture lecture)
         {
-            if (id != @module.ID)
+            if (id != lecture.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(@module).State = EntityState.Modified;
+            _context.Entry(lecture).State = EntityState.Modified;
 
             try
             {
@@ -66,7 +61,7 @@ namespace T120B165.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ModuleExists(id))
+                if (!LectureExists(id))
                 {
                     return NotFound();
                 }
@@ -79,37 +74,37 @@ namespace T120B165.Controllers
             return NoContent();
         }
 
-        // POST: api/Modules
+        // POST: api/Lectures
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Module>> PostModule(Module @module)
+        public async Task<ActionResult<Lecture>> PostLecture(Lecture lecture)
         {
-            _context.Modules.Add(@module);
+            _context.Lectures.Add(lecture);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetModule", new { id = @module.ID }, @module);
+            return CreatedAtAction("GetLecture", new { id = lecture.ID }, lecture);
         }
 
-        // DELETE: api/Modules/5
+        // DELETE: api/Lectures/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Module>> DeleteModule(int id)
+        public async Task<ActionResult<Lecture>> DeleteLecture(int id)
         {
-            var @module = await _context.Modules.FindAsync(id);
-            if (@module == null)
+            var lecture = await _context.Lectures.FindAsync(id);
+            if (lecture == null)
             {
                 return NotFound();
             }
 
-            _context.Modules.Remove(@module);
+            _context.Lectures.Remove(lecture);
             await _context.SaveChangesAsync();
 
-            return @module;
+            return lecture;
         }
 
-        private bool ModuleExists(int id)
+        private bool LectureExists(int id)
         {
-            return _context.Modules.Any(e => e.ID == id);
+            return _context.Lectures.Any(e => e.ID == id);
         }
     }
 }

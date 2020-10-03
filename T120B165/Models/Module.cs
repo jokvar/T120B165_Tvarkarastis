@@ -17,9 +17,7 @@ namespace T120B165.Models
         public string Code { get; set; }
         public int LecturerID { get; set; }
         public virtual Lecturer Lecturer { get; set; }
-
-        //public ICollection<ModuleStudent> ModuleStudents { get; set; }
         public ICollection<ModuleStudent> Students { get; set; }
+        public ICollection<Lecture> Lectures { get; set; }
     }
-
 }
