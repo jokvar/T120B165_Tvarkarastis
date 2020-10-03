@@ -17,21 +17,21 @@ namespace T120B165.Data
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Module> Modules { get; set; }
+        public DbSet<ModuleStudent> ModuleStudents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ModuleStudent>()
-                .HasKey(t => new { t.ModuleID, t.StudentID });
-
+                .HasKey(x => new { x.ModuleID, x.StudentID });
             modelBuilder.Entity<ModuleStudent>()
                 .HasOne(ms => ms.Module)
-                .WithMany(m => m.ModuleStudents)
-                .HasForeignKey(ms => ms.ModuleID);
+                .WithMany(m => m.Students)
+                .HasForeignKey(ms => ms.StudentID);
 
             modelBuilder.Entity<ModuleStudent>()
                 .HasOne(ms => ms.Student)
-                .WithMany(s => s.ModuleStudents)
-                .HasForeignKey(ms => ms.StudentID);
+                .WithMany(m => m.Modules)
+                .HasForeignKey(ms => ms.ModuleID);
         }
     }
 }

@@ -14,6 +14,6 @@ namespace T120B165.Models
         public string Vidko { get; set; }
 
         //public ICollection<ModuleStudent> ModuleStudents { get; set; }
-        public ICollection<Student> Students { get; set; }
+        public ICollection<ModuleStudent> Modules { get; set; }
     }
 }

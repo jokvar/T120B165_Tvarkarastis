@@ -7,6 +7,6 @@ namespace T120B165.Models
 {
     public class Lecturer : User
     {
-
+        public ICollection<Module> Modules { get; set; }
     }
 }

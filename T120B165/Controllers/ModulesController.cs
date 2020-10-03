@@ -25,13 +25,11 @@ namespace T120B165.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Module>>> GetModules()
         {
-            //return await _context.Modules.ToListAsync();
             return await _context.Modules
-                .Include(m => m.ModuleStudents)
-                .ThenInclude(ms => ms.Student)
+                .Include(m => m.Students)
+                .ThenInclude(s => s.Student)
+                .Include(m => m.Lecturer)
                 .ToListAsync();
-                                    
-
         }
 
         // GET: api/Modules/5

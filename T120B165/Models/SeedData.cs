@@ -85,6 +85,14 @@ namespace T120B165.Models
                     }
                 );
                 context.SaveChanges();
+                context.ModuleStudents.Add(
+                    new ModuleStudent
+                    {
+                        Student = context.Students.Single(s => s.FirstName == "Calvin"),
+                        Module = context.Modules.Single(m => m.Name == "Website Designe")
+                    }
+                    );
+                context.SaveChanges();
             }
         }
 

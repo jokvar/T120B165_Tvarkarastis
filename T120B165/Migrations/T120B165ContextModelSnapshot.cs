@@ -76,7 +76,7 @@ namespace T120B165.Migrations
                     b.ToTable("Modules");
                 });
 
-            modelBuilder.Entity("T120B165.Models.ModuleStudentMapping", b =>
+            modelBuilder.Entity("T120B165.Models.ModuleStudent", b =>
                 {
                     b.Property<int>("ModuleID")
                         .HasColumnType("int");
@@ -88,7 +88,7 @@ namespace T120B165.Migrations
 
                     b.HasIndex("StudentID");
 
-                    b.ToTable("ModuleStudentMapping");
+                    b.ToTable("ModuleStudents");
                 });
 
             modelBuilder.Entity("T120B165.Models.Student", b =>
@@ -132,22 +132,22 @@ namespace T120B165.Migrations
             modelBuilder.Entity("T120B165.Models.Module", b =>
                 {
                     b.HasOne("T120B165.Models.Lecturer", "Lecturer")
-                        .WithMany()
+                        .WithMany("Modules")
                         .HasForeignKey("LecturerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("T120B165.Models.ModuleStudentMapping", b =>
+            modelBuilder.Entity("T120B165.Models.ModuleStudent", b =>
                 {
-                    b.HasOne("T120B165.Models.Module", "Module")
-                        .WithMany("ModuleStudentMappings")
+                    b.HasOne("T120B165.Models.Student", "Student")
+                        .WithMany("Modules")
                         .HasForeignKey("ModuleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("T120B165.Models.Student", "Student")
-                        .WithMany("ModuleStudentMappings")
+                    b.HasOne("T120B165.Models.Module", "Module")
+                        .WithMany("Students")
                         .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
