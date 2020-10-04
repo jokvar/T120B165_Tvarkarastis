@@ -10,6 +10,7 @@ using T120B165.Models;
 
 namespace T120B165.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class ModulesController : ControllerBase
@@ -23,7 +24,12 @@ namespace T120B165.Controllers
 
         // GET: api/Modules
         /// <summary>
+        /// Return list of all module objects
+        /// </summary>
+        /// <returns>List of Module objects</returns>
+        /// <response code="200">Returns List of Module objects</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Module>>> GetModules()
         {
             return await _context.Modules
@@ -34,7 +40,15 @@ namespace T120B165.Controllers
         }
 
         // GET: api/Modules/5
+        /// <summary>
+        /// Return module object
+        /// </summary>
+        /// <returns>Module object</returns>
+        /// <response code="200">Returns Module object</response>
+        /// <response code="404">The object cannot be found</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Module>> GetModule(int id)
         {
             var @module = await _context.Modules.FindAsync(id);
@@ -48,9 +62,15 @@ namespace T120B165.Controllers
         }
 
         // PUT: api/Modules/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        /// Update module object
+        /// </summary>
+        /// <returns>Nothing</returns>
+        /// <response code="204">Returns nothing on success</response>
+        /// <response code="400">Supplied id does not match id in details</response>
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PutModule(int id, Module @module)
         {
             if (id != @module.ID)
@@ -80,9 +100,16 @@ namespace T120B165.Controllers
         }
 
         // POST: api/Modules
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        /// Create a new module object
+        /// </summary>
+        /// <param name="module"></param>
+        /// <returns>Created Module object</returns>
+        /// <response code="201">Returns Created Module object</response>
+        /// <response code="400">Bad request if invalid data</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Module>> PostModule(Module @module)
         {
             _context.Modules.Add(@module);
@@ -92,7 +119,15 @@ namespace T120B165.Controllers
         }
 
         // DELETE: api/Modules/5
+        /// <summary>
+        /// Delete module object
+        /// </summary>
+        /// <returns>Deleted object</returns>
+        /// <response code="200">Returns deleted module object on success</response>
+        /// <response code="404">Supplied id not found</response>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Module>> DeleteModule(int id)
         {
             var @module = await _context.Modules.FindAsync(id);

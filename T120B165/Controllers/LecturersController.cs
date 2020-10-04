@@ -11,6 +11,7 @@ using T120B165.Models;
 namespace T120B165.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class LecturersController : ControllerBase
     {
@@ -22,14 +23,28 @@ namespace T120B165.Controllers
         }
 
         // GET: api/Lecturers
+        /// <summary>
+        /// Return list of all lecturer objects
+        /// </summary>
+        /// <returns>List of lecturer objects</returns>
+        /// <response code="200">Returns List of lecturer objects</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Lecturer>>> GetLecturers()
         {
             return await _context.Lecturers.ToListAsync();
         }
 
         // GET: api/Lecturers/5
+        /// <summary>
+        /// Return lecturer object
+        /// </summary>
+        /// <returns>lecturer object</returns>
+        /// <response code="200">Returns lecturer object</response>
+        /// <response code="404">The object cannot be found</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Lecturer>> GetLecturer(int id)
         {
             var lecturer = await _context.Lecturers.FindAsync(id);
@@ -43,9 +58,15 @@ namespace T120B165.Controllers
         }
 
         // PUT: api/Lecturers/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        /// Update lecturer object
+        /// </summary>
+        /// <returns>Nothing</returns>
+        /// <response code="204">Returns nothing on success</response>
+        /// <response code="400">Supplied id does not match id in details</response>
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PutLecturer(int id, Lecturer lecturer)
         {
             if (id != lecturer.ID)
@@ -75,9 +96,16 @@ namespace T120B165.Controllers
         }
 
         // POST: api/Lecturers
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        /// Create a new lecturer object
+        /// </summary>
+        /// <param name="lecturer"></param>
+        /// <returns>Created lecturer object</returns>
+        /// <response code="201">Returns Created lecturer object</response>
+        /// <response code="400">Bad request if invalid data</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Lecturer>> PostLecturer(Lecturer lecturer)
         {
             _context.Lecturers.Add(lecturer);
@@ -87,7 +115,15 @@ namespace T120B165.Controllers
         }
 
         // DELETE: api/Lecturers/5
+        /// <summary>
+        /// Delete lecturer object
+        /// </summary>
+        /// <returns>Deleted object</returns>
+        /// <response code="200">Returns deleted lecturer object on success</response>
+        /// <response code="404">Supplied id not found</response>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Lecturer>> DeleteLecturer(int id)
         {
             var lecturer = await _context.Lecturers.FindAsync(id);

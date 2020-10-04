@@ -10,8 +10,8 @@ using T120B165.Data;
 namespace T120B165.Migrations
 {
     [DbContext(typeof(T120B165Context))]
-    [Migration("20201003191829_Initial")]
-    partial class Initial
+    [Migration("20201004111427_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
