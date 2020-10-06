@@ -11,6 +11,7 @@ using T120B165.Models;
 namespace T120B165.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class StudentsController : ControllerBase
     {

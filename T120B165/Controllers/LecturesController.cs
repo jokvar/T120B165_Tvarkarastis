@@ -10,7 +10,8 @@ using T120B165.Models;
 
 namespace T120B165.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Modules/{moduleId}/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class LecturesController : ControllerBase
     {
@@ -27,11 +28,12 @@ namespace T120B165.Controllers
         /// </summary>
         /// <returns>List of lecture objects</returns>
         /// <response code="200">Returns List of lecture objects</response>
+        /// <param name="moduleId">Integer id of module</param>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Lecture>>> GetLectures()
+        public async Task<ActionResult<IEnumerable<Lecture>>> GetLectures(int moduleId)
         {
-            return await _context.Lectures.ToListAsync();
+            return await _context.Lectures.Where(l => l.ModuleID == moduleId).ToListAsync();    
         }
 
         // GET: api/Lectures/5

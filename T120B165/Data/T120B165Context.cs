@@ -12,7 +12,6 @@ namespace T120B165.Data
     {
         public T120B165Context(DbContextOptions<T120B165Context> options) : base(options)
         {
-
         }
 
         public DbSet<Lecturer> Lecturers { get; set; }
@@ -93,7 +92,5 @@ namespace T120B165.Data
                 .WithMany(m => m.InformalGatherings)
                 .HasForeignKey(ms => ms.InformalGatheringID);
         }
-
-        
     }
 }

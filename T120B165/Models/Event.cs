@@ -34,7 +34,7 @@ namespace T120B165.Models
     {
         public string Hall { get; set; }
         public ICollection<LectureStudent> Students { get; set; }
-        public int? ModuleID { get; set; }
+        public int ModuleID { get; set; }
         public virtual Module Module { get; set; }
         public ICollection<LectureTimeTable> TimeTables { get; set; }
     }
