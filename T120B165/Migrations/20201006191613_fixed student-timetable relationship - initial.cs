@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace T120B165.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class fixedstudenttimetablerelationshipinitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,24 @@ namespace T120B165.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Lecturers",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    Username = table.Column<string>(maxLength: 20, nullable: false),
+                    Password = table.Column<string>(maxLength: 60, nullable: false),
+                    ApiKey = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lecturers", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Students",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -37,37 +54,11 @@ namespace T120B165.Migrations
                     Username = table.Column<string>(maxLength: 20, nullable: false),
                     Password = table.Column<string>(maxLength: 60, nullable: false),
                     ApiKey = table.Column<string>(nullable: true),
-                    TimeTableId = table.Column<int>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    Vidko = table.Column<string>(maxLength: 5, nullable: true)
+                    Vidko = table.Column<string>(maxLength: 5, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InformalGatheringStudents",
-                columns: table => new
-                {
-                    InformalGatheringID = table.Column<int>(nullable: false),
-                    StudentID = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InformalGatheringStudents", x => new { x.InformalGatheringID, x.StudentID });
-                    table.ForeignKey(
-                        name: "FK_InformalGatheringStudents_User_InformalGatheringID",
-                        column: x => x.InformalGatheringID,
-                        principalTable: "User",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_InformalGatheringStudents_InformalGatherings_StudentID",
-                        column: x => x.StudentID,
-                        principalTable: "InformalGatherings",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Students", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,9 +75,33 @@ namespace T120B165.Migrations
                 {
                     table.PrimaryKey("PK_Modules", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Modules_User_LecturerID",
+                        name: "FK_Modules_Lecturers_LecturerID",
                         column: x => x.LecturerID,
-                        principalTable: "User",
+                        principalTable: "Lecturers",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InformalGatheringStudents",
+                columns: table => new
+                {
+                    InformalGatheringID = table.Column<int>(nullable: false),
+                    StudentID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InformalGatheringStudents", x => new { x.InformalGatheringID, x.StudentID });
+                    table.ForeignKey(
+                        name: "FK_InformalGatheringStudents_Students_InformalGatheringID",
+                        column: x => x.InformalGatheringID,
+                        principalTable: "Students",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_InformalGatheringStudents_InformalGatherings_StudentID",
+                        column: x => x.StudentID,
+                        principalTable: "InformalGatherings",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -97,15 +112,15 @@ namespace T120B165.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(nullable: false)
+                    StudentID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TimeTables", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_TimeTables_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
+                        name: "FK_TimeTables_Students_StudentID",
+                        column: x => x.StudentID,
+                        principalTable: "Students",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -124,16 +139,16 @@ namespace T120B165.Migrations
                     Description = table.Column<string>(nullable: true),
                     Tags = table.Column<string>(nullable: true),
                     Hall = table.Column<string>(nullable: true),
-                    ModuleID = table.Column<int>(nullable: true),
+                    ModuleID = table.Column<int>(nullable: false),
                     LecturerID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lectures", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Lectures_User_LecturerID",
+                        name: "FK_Lectures_Lecturers_LecturerID",
                         column: x => x.LecturerID,
-                        principalTable: "User",
+                        principalTable: "Lecturers",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -155,9 +170,9 @@ namespace T120B165.Migrations
                 {
                     table.PrimaryKey("PK_ModuleStudents", x => new { x.ModuleID, x.StudentID });
                     table.ForeignKey(
-                        name: "FK_ModuleStudents_User_ModuleID",
+                        name: "FK_ModuleStudents_Students_ModuleID",
                         column: x => x.ModuleID,
-                        principalTable: "User",
+                        principalTable: "Students",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -203,9 +218,9 @@ namespace T120B165.Migrations
                 {
                     table.PrimaryKey("PK_LectureStudents", x => new { x.LectureID, x.StudentID });
                     table.ForeignKey(
-                        name: "FK_LectureStudents_User_LectureID",
+                        name: "FK_LectureStudents_Students_LectureID",
                         column: x => x.LectureID,
-                        principalTable: "User",
+                        principalTable: "Students",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -281,9 +296,9 @@ namespace T120B165.Migrations
                 column: "TimeTableID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TimeTables_UserID",
+                name: "IX_TimeTables_StudentID",
                 table: "TimeTables",
-                column: "UserID");
+                column: "StudentID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -316,7 +331,10 @@ namespace T120B165.Migrations
                 name: "Modules");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Students");
+
+            migrationBuilder.DropTable(
+                name: "Lecturers");
         }
     }
 }

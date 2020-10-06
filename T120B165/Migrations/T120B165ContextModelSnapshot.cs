@@ -110,7 +110,7 @@ namespace T120B165.Migrations
                     b.Property<int?>("LecturerID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ModuleID")
+                    b.Property<int>("ModuleID")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -162,6 +162,39 @@ namespace T120B165.Migrations
                     b.ToTable("LectureTimeTables");
                 });
 
+            modelBuilder.Entity("T120B165.Models.Lecturer", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApiKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(60);
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Lecturers");
+                });
+
             modelBuilder.Entity("T120B165.Models.Module", b =>
                 {
                     b.Property<int>("ID")
@@ -202,24 +235,7 @@ namespace T120B165.Migrations
                     b.ToTable("ModuleStudents");
                 });
 
-            modelBuilder.Entity("T120B165.Models.TimeTable", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("TimeTables");
-                });
-
-            modelBuilder.Entity("T120B165.Models.User", b =>
+            modelBuilder.Entity("T120B165.Models.Student", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -227,10 +243,6 @@ namespace T120B165.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ApiKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -246,38 +258,36 @@ namespace T120B165.Migrations
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
-                    b.Property<int?>("TimeTableId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
-
-                    b.HasKey("ID");
-
-                    b.ToTable("User");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-                });
-
-            modelBuilder.Entity("T120B165.Models.Lecturer", b =>
-                {
-                    b.HasBaseType("T120B165.Models.User");
-
-                    b.HasDiscriminator().HasValue("Lecturer");
-                });
-
-            modelBuilder.Entity("T120B165.Models.Student", b =>
-                {
-                    b.HasBaseType("T120B165.Models.User");
 
                     b.Property<string>("Vidko")
                         .IsRequired()
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
-                    b.HasDiscriminator().HasValue("Student");
+                    b.HasKey("ID");
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("T120B165.Models.TimeTable", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StudentID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("StudentID");
+
+                    b.ToTable("TimeTables");
                 });
 
             modelBuilder.Entity("T120B165.Models.InformalGatheringStudent", b =>
@@ -320,7 +330,8 @@ namespace T120B165.Migrations
                     b.HasOne("T120B165.Models.Module", "Module")
                         .WithMany("Lectures")
                         .HasForeignKey("ModuleID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("T120B165.Models.LectureStudent", b =>
@@ -379,9 +390,9 @@ namespace T120B165.Migrations
 
             modelBuilder.Entity("T120B165.Models.TimeTable", b =>
                 {
-                    b.HasOne("T120B165.Models.User", "User")
-                        .WithMany("TimeTable")
-                        .HasForeignKey("UserID")
+                    b.HasOne("T120B165.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
