@@ -11,7 +11,7 @@ using T120B165.Models;
 namespace T120B165.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class InformalGatheringsController : ControllerBase
     {
@@ -108,6 +108,10 @@ namespace T120B165.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<InformalGathering>> PostInformalGathering(InformalGathering informalGathering)
         {
+            if (informalGathering.EndDate == default)
+            {
+
+            }
             _context.InformalGatherings.Add(informalGathering);
             await _context.SaveChangesAsync();
 

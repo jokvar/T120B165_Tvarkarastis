@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using T120B165.Models;
 
 namespace T120B165.Controllers
 {
-    [Route("api/Modules/{moduleId}/[controller]")]
+    [Route("Modules/{moduleId}/[controller]")]
     [Produces("application/json")]
     [ApiController]
     public class LecturesController : ControllerBase
@@ -109,6 +110,22 @@ namespace T120B165.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Lecture>> PostLecture(Lecture lecture)
         {
+            if (lecture.Duration == null)
+            {
+                if (lecture.EndDate == default)
+                {
+                    lecture.Duration = TimeSpan.FromHours(1);
+                    lecture.EndDate = lecture.StartDate.Add(lecture.Duration);
+                }
+                else
+                {
+                    lecture.Duration = lecture.EndDate.Subtract(lecture.StartDate);
+                }
+            }
+            if (lecture.EndDate == default)
+            {
+                lecture.EndDate = lecture.StartDate.Add(lecture.Duration);
+            }
             _context.Lectures.Add(lecture);
             await _context.SaveChangesAsync();
 
@@ -127,6 +144,11 @@ namespace T120B165.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Lecture>> DeleteLecture(int id)
         {
+            (var isLecturer, var username) = IsLecturer();
+            if (!isLecturer)
+            {
+
+            }
             var lecture = await _context.Lectures.FindAsync(id);
             if (lecture == null)
             {
@@ -142,6 +164,34 @@ namespace T120B165.Controllers
         private bool LectureExists(int id)
         {
             return _context.Lectures.Any(e => e.ID == id);
+        }
+
+        private (bool,string) IsLecturer()
+        {
+            var username = GetUsernameFromClaims(HttpContext.User.Identity as ClaimsIdentity);
+            var student = _context.Students.Where(s => s.Username == username).FirstOrDefault();
+            if (student != null)
+            {
+                //this is a student
+                return (false, "Students are not authorized for this action");
+            }
+            var user = _context.Lecturers.Where(l => l.Username == username).FirstOrDefault();
+            if (user == null)
+            {
+                //invalid username
+                return (false, "Invalid Lecturer");
+            }
+            return (true, user.Username);
+        }
+        private string GetUsernameFromClaims(ClaimsIdentity claimsIdentity)
+        {
+            var claims = claimsIdentity.Claims;
+            var usernameClaim = claims.Where(c => c.Type == "Username").FirstOrDefault();
+            if (usernameClaim == null)
+            {
+                throw new NullReferenceException("Authorized user provided no valid username claim. Definitely internal error.");
+            }
+            return usernameClaim.Value;
         }
     }
 }

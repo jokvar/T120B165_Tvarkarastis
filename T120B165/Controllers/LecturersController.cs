@@ -10,7 +10,7 @@ using T120B165.Models;
 
 namespace T120B165.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
     public class LecturersController : ControllerBase
@@ -22,7 +22,7 @@ namespace T120B165.Controllers
             _context = context;
         }
 
-        // GET: api/Lecturers
+        // GET: Lecturers
         /// <summary>
         /// Return list of all lecturer objects
         /// </summary>
@@ -35,7 +35,7 @@ namespace T120B165.Controllers
             return await _context.Lecturers.ToListAsync();
         }
 
-        // GET: api/Lecturers/5
+        // GET: Lecturers/5
         /// <summary>
         /// Return lecturer object
         /// </summary>

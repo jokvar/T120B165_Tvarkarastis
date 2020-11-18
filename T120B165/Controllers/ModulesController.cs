@@ -11,7 +11,7 @@ using T120B165.Models;
 namespace T120B165.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ModulesController : ControllerBase
     {
@@ -46,6 +46,7 @@ namespace T120B165.Controllers
         /// <returns>Module object</returns>
         /// <response code="200">Returns Module object</response>
         /// <response code="404">The object cannot be found</response>
+        /// <param name="id">Integer id of module</param>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
